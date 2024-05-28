@@ -1,0 +1,43 @@
+#include <Servo.h>
+Servo servoThumb;
+Servo servoIndex;
+Servo servoMiddle;
+Servo servoRing;
+Servo servoPinky;
+void setup() {
+  Serial.begin(9600);
+  servoThumb.attach(7);
+  servoIndex.attach(8);
+  servoMiddle.attach(9);
+  servoRing.attach(10);
+  servoPinky.attach(11);
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    // Read the incoming data as a string until a newline character is received
+    String data = Serial.readStringUntil('\n');
+
+    // Parse the comma-separated values
+    int values[5];  // Change the array size based on your data size
+    int i = 0;
+    char *ptr = strtok((char *)data.c_str(), ",");
+    while (ptr != NULL) {
+      values[i++] = atoi(ptr);
+      ptr = strtok(NULL, ",");
+    }
+
+    // Process the received data
+    for (int j = 0; j < i; j++) {
+      // Do something with the values, for example, print them
+      Serial.print(values[j]);
+      Serial.print(" ");
+    }
+    Serial.println(); 
+if (values[0] == 1) { servoThumb.write(180); } else { servoThumb.write(0); }
+   if (values[1] == 1) { servoIndex.write(180); } else { servoIndex.write(0); }
+   if (values[2] == 1) { servoMiddle.write(180); } else { servoMiddle.write(0); }
+   if (values[3] == 1) { servoRing.write(180); } else { servoRing.write(0); }
+   if (values[4] == 1) { servoPinky.write(180); } else { servoPinky.write(0); }
+  }
+}
